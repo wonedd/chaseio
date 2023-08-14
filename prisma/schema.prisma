@@ -1,0 +1,44 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+model chaseio {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  bairro            String
+  celular           String?
+  cep               String
+  cidade_exterior   String?
+  cnae_fiscal       String
+  cnae_secundario   String?
+  cnpj              String
+  complemento       String?
+  contato_realizado Boolean
+  data_situacao     String
+  email             String
+  inicio_atividade  String
+  logradouro        String
+  motivo_situacao   String?
+  municipio         String
+  natureza          String
+  nome_fantasia     String?
+  numero            String
+  opcao_mei         String
+  opcao_simples     String
+  razao_social      String
+  situacao          String
+  telefone1         String
+  telefone2         String?
+  tipo_logradouro   String
+  uf                String
+
+  @@index([cnae_fiscal], map: "cnae_fiscal_1")
+  @@index([uf], map: "uf_1")
+  @@index([municipio], map: "municipio_1")
+  @@index([bairro], map: "bairro_1")
+  @@index([cep], map: "cep_1")
+}
