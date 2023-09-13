@@ -42,3 +42,9 @@ model chaseio {
   @@index([bairro], map: "bairro_1")
   @@index([cep], map: "cep_1")
 }
+
+model users {
+  id    String @id @default(auto()) @map("_id") @db.ObjectId
+  login String
+  senha String
+}

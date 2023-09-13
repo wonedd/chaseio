@@ -1,40 +1,34 @@
 import express from 'express';
-import dotenv from 'dotenv';
-import { join, dirname } from 'path';
-
-import { fileURLToPath } from 'url';
-import { SearchService } from './services/SearchService';
-import { SearchController } from './controllers/SearchController';
-import { ChaseioRepository } from './database/ChaseioRepository';
-
-dotenv.config();
+import { SearchService } from './services/SearchService.js';
+import { SearchController } from './controllers/SearchController.js';
+import { ChaseioRepository } from './database/ChaseioRepository.js';
+import { AuthService } from './services/security/AuthService.js';
+import { AuthController } from './controllers/security/AuthController.js';
+import { AuthToken } from './security/middlewares/AuthToken.js';
 
 const app = express();
 
-app.set('view engine', 'ejs');
-
-app.use(express.json());
 
 const PORT = process.env.PORT || 3000;
-
-app.get('/', (req, res) => {
-  res.render('index');
-});
-
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = dirname(__filename);
-
-app.use('/styles', express.static(join(__dirname, 'styles')));
-app.use('/scripts', express.static(join(__dirname, 'scripts')));
-app.use('./', express.static(join(__dirname, 'scripts')));
-
-app.set('views', join(__dirname, 'views'));
+const SECRET_KEY = process.env.SECRET_KEY;
 
 const chaseioRepository = new ChaseioRepository();
 const searchService = new SearchService(chaseioRepository);
 const searchController = new SearchController(searchService);
 
+const authService = new AuthService(SECRET_KEY, chaseioRepository);
+
+const authController = new AuthController(authService)
+
+app.use(express.json());
+
+app.post('/login', authController.login)
+const authToken = new AuthToken(SECRET_KEY);
+
+app.use('/search', authToken.authenticateToken);
+
 app.post('/search', searchController.fetchData);
+app.get('/', searchController.fetchAll);
 
 app.listen(PORT, () => {
   console.log(`Server started on port ${PORT}`);

@@ -1,29 +1,36 @@
+import { ErrorHandler } from '../error/ErrorHandler.js';
 
 export class SearchController {
   constructor(searchService) {
     this.searchService = searchService;
   }
 
-  fetchData = async (req, res) => {
+  async fetchAll(req, res) {
+    try {
+      const result = await this.searchService.findAll();
+
+      res.status(200).json({
+        result
+      });
+    } catch (error) {
+      const errorHandler = ErrorHandler.internalServerError('Erro ao buscar resultados');
+      res.status(errorHandler.statusCode).json({ error: errorHandler.message });
+    }
+  }
+
+  async fetchData(req, res) {
     try {
       const { query } = req.body;
 
       const resultsCnaeFiscal = await this.searchService.searchByCnaeFiscal(query);
-      const resultsUF = await this.searchService.searchByUF(query);
-      const resultsMunicipio = await this.searchService.searchByMunicipio(query);
-      const resultsBairro = await this.searchService.searchByBairro(query);
-      const resultsCEP = await this.searchService.searchByCEP(query);
 
       res.status(200).json({
         resultsCnaeFiscal,
-        resultsUF,
-        resultsMunicipio,
-        resultsBairro,
-        resultsCEP,
       });
     } catch (error) {
-      console.error(error);
-      res.status(500).json({ error: 'An error occurred.' });
+      // Tratar o erro usando o ErrorHandler
+      const errorHandler = ErrorHandler.internalServerError('Erro ao buscar resultados por CNAE Fiscal');
+      res.status(errorHandler.statusCode).json({ error: errorHandler.message });
     }
   }
 }

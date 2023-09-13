@@ -28,4 +28,9 @@ export class SearchService {
     const results = await this.chaseioRepository.searchByCEP(query);
     return results;
   }
+
+  findAll = async () => {
+    const results = await this.chaseioRepository.findAll();
+    return results;
+  }
 }

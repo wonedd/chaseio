@@ -9,6 +9,7 @@ export class ChaseioRepository {
         where: {
           cnae_fiscal: { contains: query },
         },
+        take: 10,
       });
 
       return results;
@@ -22,6 +23,7 @@ export class ChaseioRepository {
       const results = await prisma.chaseio.findMany({
         where: {
           uf: { contains: query },
+          take: 10,
         },
       });
 
@@ -36,6 +38,7 @@ export class ChaseioRepository {
       const results = await prisma.chaseio.findMany({
         where: {
           municipio: { contains: query },
+          take: 10,
         },
       });
 
@@ -50,6 +53,7 @@ export class ChaseioRepository {
       const results = await prisma.chaseio.findMany({
         where: {
           bairro: { contains: query },
+          take: 10,
         },
       });
 
@@ -64,6 +68,7 @@ export class ChaseioRepository {
       const results = await prisma.chaseio.findMany({
         where: {
           cep: { contains: query },
+          take: 10,
         },
       });
 
@@ -72,4 +77,32 @@ export class ChaseioRepository {
       return [];
     }
   }
+
+  async findAll() {
+    try {
+      const result = await prisma.chaseio.findMany({
+        take: 500,
+      });
+
+      return (result);
+    } catch (error) {
+      return error;
+    }
+  }
+
+  async login(credentials) {
+    try {
+      const result = await prisma.users.findFirst({
+        where: {
+          login: credentials.login,
+          password: credentials.password
+        }
+      })
+
+      return result;
+    } catch (error) {
+      return error;
+    }
+  }
+
 }

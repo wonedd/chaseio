@@ -11,15 +11,13 @@
     "dev": "nodemon ./src/app.js",
     "start": "node ./src/app.js"
   },
-  
   "dependencies": {
-    "@prisma/client": "^5.0.0",
+    "@prisma/client": "5.1.1",
     "axios": "^1.4.0",
     "dotenv": "^16.3.1",
-    "ejs": "^3.1.9",
     "express": "^4.18.2",
+    "jsonwebtoken": "^9.0.2",
     "mongodb": "^5.7.0",
-    "nodemon": "^2.0.22",
-    "prisma": "^5.0.0"
+    "nodemon": "^2.0.22"
   }
 }
