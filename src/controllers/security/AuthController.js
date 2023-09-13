@@ -20,8 +20,9 @@ export class AuthController {
         res.status(errorHandler.statusCode).json({ error: errorHandler.message });
       }
     } catch (error) {
-      console.log(error)
-      res.status(500).json({ error: error });
+      const errorHandler = ErrorHandler.internalServerError(error.message);
+      res.status(errorHandler.statusCode).json({ error: errorHandler.message });
+
     }
   }
 

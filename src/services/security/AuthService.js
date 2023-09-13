@@ -1,7 +1,5 @@
 import jwt from 'jsonwebtoken';
 import { ErrorHandler } from '../../error/ErrorHandler.js';
-
-
 export class AuthService {
   constructor(secretKey, chaseioRepository) {
     this.secretKey = secretKey;
@@ -9,15 +7,13 @@ export class AuthService {
 
   }
 
-  login = async (credentials) => {
+  async login(credentials) {
     try {
       const user = await this.chaseioRepository.login(credentials);
 
       if (user) {
         const token = jwt.sign({ id: user.id, username: user.login }, this.secretKey, { expiresIn: '1h' });
-        console.log("Generated Token:", token);
         return token;
-
       } else {
         throw ErrorHandler.unauthorized('Credenciais inválidas');
       }
