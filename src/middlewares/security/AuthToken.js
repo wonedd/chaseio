@@ -2,10 +2,6 @@ import jwt from 'jsonwebtoken';
 import { ErrorHandler } from '../../error/ErrorHandler.js';
 
 export class AuthToken {
-  constructor(secretKey) {
-    this.secretKey = secretKey;
-  }
-
   authenticateToken(req, res, next) {
     const token = req.header('Authorization');
 
@@ -14,7 +10,7 @@ export class AuthToken {
       return res.status(errorHandler.statusCode).json({ error: errorHandler.message });
     }
 
-    jwt.verify(token, this.secretKey, (err, user) => {
+    jwt.verify(token, process.env.SECRET_KEY, (err, user) => {
       if (err) {
         const errorHandler = ErrorHandler.forbidden('Token inválido');
         return res.status(errorHandler.statusCode).json({ error: errorHandler.message });

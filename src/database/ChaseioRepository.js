@@ -81,7 +81,7 @@ export class ChaseioRepository {
   async findAll() {
     try {
       const result = await prisma.chaseio.findMany({
-        take: 500,
+        take: 5000,
       });
 
       return (result);

@@ -5,13 +5,11 @@ export class AuthController {
     this.authService = authService
   }
 
-  async login(req, res) {
+  login = async (req, res) => {
     try {
       const { credentials } = req.body;
 
       const token = await this.authService.login(credentials);
-
-      console.log(token)
 
       if (token) {
         res.json({ token });
@@ -26,7 +24,7 @@ export class AuthController {
     }
   }
 
-  async logout(req, res) {
+  logout = async (req, res) => {
     res.json({ message: 'Logout realizado com sucesso' });
   }
 }

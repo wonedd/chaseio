@@ -7,7 +7,7 @@ export class AuthService {
 
   }
 
-  async login(credentials) {
+  login = async (credentials) => {
     try {
       const user = await this.chaseioRepository.login(credentials);
 
@@ -22,7 +22,7 @@ export class AuthService {
     }
   }
 
-  verifyToken(token) {
+  verifyToken = async (token) => {
     try {
       const decoded = jwt.verify(token, this.secretKey);
       return decoded;
