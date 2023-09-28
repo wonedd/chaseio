@@ -90,6 +90,25 @@ export class ChaseioRepository {
     }
   }
 
+  async setWasContacted(companieCel) {
+    try {
+      const result = await companie.chaseio.findFirst({
+        where: {
+          celular: companieCel
+        }
+      });
+
+      result.contato_realizado = true;
+      await result.save();
+
+      return result;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+
+
   async login(credentials) {
     try {
       const result = await prisma.users.findFirst({

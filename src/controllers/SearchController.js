@@ -1,8 +1,8 @@
 import { ErrorHandler } from '../error/ErrorHandler.js';
 
 export class SearchController {
-  constructor(searchService) {
-    this.searchService = searchService;
+  constructor(_searchService) {
+    this.searchService = _searchService;
   }
 
   async fetchAll(req, res) {
