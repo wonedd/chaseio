@@ -19,22 +19,17 @@ export class BotService {
         const phoneNumber = '55' + company.celular + '@c.us';
         const message = `Olá ${company.nome_fantasia}`;
 
-        const isRegistered = await this._verifyNumber(phoneNumber, client);
+        await client.sendText(phoneNumber, message);
+        console.log('Mensagem enviada para:', phoneNumber);
 
-        if (isRegistered) {
-          await client.sendText(phoneNumber, message);
-          console.log('Mensagem enviada para:', phoneNumber);
+        const result = await this.chaseioRepository.setWasContacted(company.celular);
 
-          const result = await this.chaseioRepository.setWasContacted(company.celular);
+        const response = {
+          content: await this._getMessage(client),
+          result,
+        };
 
-          const response = {
-            content: await this._getMessage(client),
-            result,
-          };
-          responses.push(response);
-        } else {
-          console.log('Número não está registrado no WhatsApp:', phoneNumber);
-        }
+        responses.push(response);
       }
 
       await client.close();
@@ -64,13 +59,5 @@ export class BotService {
     });
   }
 
-  _verifyNumber = async (phoneNumber, client) => {
-    try {
-      const isRegistered = await client.isRegisteredUser(phoneNumber);
 
-      return isRegistered;
-    } catch (error) {
-      throw ErrorHandler.internalServerError(error.message);
-    }
-  }
 }
