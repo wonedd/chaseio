@@ -17,7 +17,7 @@ export class BotService {
 
       for (const company of companies) {
         const phoneNumber = '55' + company.celular + '@c.us';
-        const message = `Olá ${company.nome_fantasia}`;
+        const message = `Olá ${company.razao_social}`;
 
         await client.sendText(phoneNumber, message);
         console.log('Mensagem enviada para:', phoneNumber);
