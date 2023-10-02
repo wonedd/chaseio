@@ -10,7 +10,6 @@ import { AuthService } from '../services/security/AuthService.js';
 import { SearchService } from '../services/SearchService.js';
 import { BotService } from '../services/security/BotService.js';
 import { BotController } from '../controllers/security/BotController.js';
-import currentUser from '../security/CurrentUser.js';
 
 const { readFile } = fsPromises;
 
@@ -34,6 +33,19 @@ const authController = new AuthController(authService);
 const botController = new BotController(botService);
 const auth = new AuthToken();
 
+router.get('/doc', async (req, res) => {
+  const publicDir = path.join(currentDirectory, '../views');
+  const filePath = path.join(publicDir, 'index.html');
+  try {
+    const data = await readFile(filePath, 'utf8');
+
+    res.setHeader('Content-Type', 'text/html');
+    res.send(data);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send('Erro ao ler o arquivo HTML.');
+  }
+});
 
 router.post('/login', (req, res) => {
   authController.login(req, res);
@@ -58,19 +70,6 @@ router.get('/', (req, res) => {
 });
 
 
-router.get('/teste', async (req, res) => {
-  const publicDir = path.join(currentDirectory, '../public');
-  const filePath = path.join(publicDir, 'index.html');
-  try {
-    const data = await readFile(filePath, 'utf8');
-
-    res.setHeader('Content-Type', 'text/html');
-    res.send(data);
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Erro ao ler o arquivo HTML.');
-  }
-});
 
 
 export function initRoutes(app) {

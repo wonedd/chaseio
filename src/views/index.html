@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Documentação de Rotas</title>
+  <style>
+    body {
+      font-family: sans-serif;
+      background-color: #222;
+      color: #fff;
+      margin: 0;
+      padding: 0;
+    }
+    h1 {
+      background-color: #007BFF;
+      color: #fff;
+      padding: 10px;
+      text-align: center;
+    }
+    ul {
+      list-style-type: none;
+      padding: 0;
+    }
+    li {
+      border: 1px solid #444;
+      border-radius: 5px;
+      margin: 10px 0;
+      padding: 10px;
+    }
+    strong {
+      color: #007BFF;
+    }
+    p {
+      margin: 10px 0;
+    }
+    pre {
+      background-color: #444;
+      color: #fff;
+      padding: 10px;
+      border-radius: 5px;
+    }
+  </style>
+</head>
+<body>
+  <h1>Documentação de Rotas</h1>
+  <ul>
+    <li>
+      <strong>POST /login</strong>: Rota para autenticar um usuário.
+      <p>Esta rota permite que os usuários façam login fornecendo suas credenciais.</p>
+      <p>Exemplo de solicitação:</p>
+      <pre>
+        POST /login
+        {
+          "credentials": {
+            "username": "seu-username",
+            "password": "sua-senha"
+          }
+        }
+      </pre>
+    </li>
+    <li>
+      <strong>POST /bot</strong>: Rota para enviar mensagem via WhatsApp.
+      <p>Esta rota permite que você envie mensagens via WhatsApp para empresas.</p>
+      <p>Exemplo de solicitação:</p>
+      <pre>
+        POST /bot
+        {
+          "companies": [
+            {
+              "celular": "Nome da Empresa 1",
+              "razao_social": "Razao Social 1"
+            },
+            {
+              "celular": "Nome da Empresa 2",
+              "razao_social": "Razao Social 2"
+            }
+          ]
+        }
+      </pre>
+    </li>
+    <li>
+      <strong>GET /logout</strong>: Rota para fazer logout.
+      <p>Esta rota permite que os usuários façam logout e encerrem suas sessões.</p>
+      <p>Exemplo de solicitação:</p>
+      <pre>
+        GET /logout
+      </pre>
+    </li>
+    <li>
+      <strong>POST /search</strong>: Rota para buscar dados.
+      <p>Esta rota permite que você busque dados com base em critérios de pesquisa.</p>
+      <p>Exemplo de solicitação:</p>
+      <pre>
+        POST /search
+        {
+          "query": "termo-de-busca"
+        }
+      </pre>
+    </li>
+    <li>
+      <strong>GET /</strong>: Rota para buscar todos os resultados.
+      <p>Esta rota retorna todos os resultados disponíveis.</p>
+      <p>Exemplo de solicitação:</p>
+      <pre>
+        GET /
+      </pre>
+    </li>
+    <li>
+      <strong>GET /doc</strong>: Rota para acessar a documentação de rotas.
+      <p>Esta rota redireciona para esta página de documentação.</p>
+      <p>Exemplo de solicitação:</p>
+      <pre>
+        GET /doc
+      </pre>
+    </li>
+  </ul>
+</body>
+</html>
