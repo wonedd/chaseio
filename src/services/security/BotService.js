@@ -21,6 +21,7 @@ export class BotService {
 
         // const receivedMessage = await new Promise((resolve, reject) => {
         client.onMessage(async (message) => {
+          console.log(message)
           //     if (message) {
           //       try {
           //         const response = {
@@ -30,7 +31,8 @@ export class BotService {
           //           celular: message.from,
           //         };
 
-          await this.chaseioRepository.createMessage(message.body);
+          const result = await this.chaseioRepository.createMessage(message.body);
+          console.log(result)
         });
         //         resolve(response);
         //       } catch (error) {

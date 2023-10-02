@@ -92,7 +92,7 @@ export class ChaseioRepository {
 
   async findAllMessages() {
     try {
-      const result = await prisma.chaseio.findMany();
+      const result = await prisma.messages.findMany();
 
       return (result);
     } catch (error) {
