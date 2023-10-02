@@ -51,6 +51,7 @@ router.post('/login', (req, res) => {
   authController.login(req, res);
 });
 
+router.get('/messages', (req, res) => botController.findAllMessages(req, res))
 router.post('/bot', (req, res) => {
   botController.sendWpp(req, res);
 })

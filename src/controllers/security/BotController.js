@@ -5,6 +5,14 @@ export class BotController {
     this.botService = botService;
   }
 
+  findAllMessages = async (req, res) => {
+    const result = await this.botService.listMessages();
+    if (!result) {
+      return res.status(400).json({ error: 'Nenhuma mensagem encontrada.' });
+    }
+    return res.status(200).json(result);
+  }
+
   sendWpp = async (req, res) => {
     try {
       const { companies } = req.body;
@@ -21,4 +29,6 @@ export class BotController {
       res.status(errorHandler.statusCode).json({ error: errorHandler.message });
     }
   }
+
+
 }

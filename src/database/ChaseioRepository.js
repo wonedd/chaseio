@@ -90,6 +90,17 @@ export class ChaseioRepository {
     }
   }
 
+  async findAllMessages() {
+    try {
+      const result = await prisma.chaseio.findMany();
+
+      return (result);
+    } catch (error) {
+      return error;
+    }
+  }
+
+
   async setWasContacted(companieCel) {
     try {
       const result = await companie.chaseio.findFirst({
@@ -123,5 +134,16 @@ export class ChaseioRepository {
     }
   }
 
+  async createMessage(message) {
+    try {
+      const result = await prisma.messages.create({
+        data: message
+      })
+
+      return result;
+    } catch (error) {
+      return error;
+    }
+  }
 
 }

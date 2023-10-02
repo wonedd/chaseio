@@ -1,19 +1,16 @@
 import venom from 'venom-bot';
 import { ErrorHandler } from '../../error/ErrorHandler.js';
+import { EventEmitter } from 'events'
 
 export class BotService {
   constructor(chaseioRepository) {
     this.chaseioRepository = chaseioRepository;
   }
+
   sendMessage = async (companies) => {
     try {
       const client = await venom.create({ session: 'session-name' });
-
-      client.onStateChange((state) => {
-        console.log('onStateChange', state);
-      });
-
-      const responses = [];
+      const response = [];
 
       for (const company of companies) {
         const phoneNumber = '55' + company.celular + '@c.us';
@@ -22,42 +19,57 @@ export class BotService {
         await client.sendText(phoneNumber, message);
         console.log('Mensagem enviada para:', phoneNumber);
 
-        const result = await this.chaseioRepository.setWasContacted(company.celular);
+        // const receivedMessage = await new Promise((resolve, reject) => {
+        client.onMessage(async (message) => {
+          //     if (message) {
+          //       try {
+          //         const response = {
+          //           mensagem_id: message.id,
+          //           corpo: message.body,
+          //           alvo: message.notifyName,
+          //           celular: message.from,
+          //         };
 
-        const response = {
-          content: await this._getMessage(client),
-          result,
-        };
+          await this.chaseioRepository.createMessage(message.body);
+        });
+        //         resolve(response);
+        //       } catch (error) {
+        //         reject(error);
+        //       }
+        //     } else {
+        //       reject(ErrorHandler.internalServerError());
+        //     }
+        //   });
+        // });
 
-        responses.push(response);
+        // const result = await this.chaseioRepository.setWasContacted(company.celular);
+
+        // responses.push({
+        //   phoneNumber,
+        //   sentMessage: message,
+        //   receivedMessage,
+        //   wasContacted: result,
+        // });
+        response.push({
+          companies
+        })
+
       }
 
-      await client.close();
+      // await client.close();
 
-      return responses;
+      return response;
     } catch (error) {
       throw ErrorHandler.internalServerError(error.message);
     }
-  }
-
-
-  _getMessage = (client) => {
-    return new Promise((resolve, reject) => {
-      client.onMessage((message) => {
-        if (message) {
-          const response = {
-            id: message?.id.slice('@')[1],
-            body: message?.body,
-            target: message?.notifyName,
-            num: message?.from.slice('@')[0],
-          };
-          resolve(response);
-        } else {
-          reject(ErrorHandler.internalServerError('Erro ao obter mensagem.'));
-        }
-      });
-    });
-  }
-
+  };
+  listMessages = async () => {
+    try {
+      const messages = await this.chaseioRepository.findAllMessages();
+      return messages;
+    } catch (error) {
+      throw ErrorHandler.internalServerError(error.message);
+    }
+  };
 
 }
