@@ -18,11 +18,11 @@ export class SearchController {
     }
   }
 
-  async fetchData(req, res) {
+  async fetchDataByCnae(req, res) {
     try {
-      const { query } = req.body;
+      const { cnae } = req.body;
 
-      const resultsCnaeFiscal = await this.searchService.searchByCnaeFiscal(query);
+      const resultsCnaeFiscal = await this.searchService.searchByCnaeFiscal(cnae);
 
       res.status(200).json({
         resultsCnaeFiscal,

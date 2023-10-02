@@ -57,11 +57,11 @@ router.post('/bot', (req, res) => {
 
 router.get('/logout', (req, res) => authController.logout(req, res));
 
-router.use('/search', auth.authenticateToken);
+router.use('/search/cnae', auth.authenticateToken);
 router.use('/', auth.authenticateToken);
 
-router.post('/search', (req, res) => {
-  searchController.fetchData(req, res);
+router.post('/search/cnae', (req, res) => {
+  searchController.fetchDataByCnae(req, res);
 });
 
 
