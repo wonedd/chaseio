@@ -1,7 +1,6 @@
 import { promises as fsPromises } from 'fs';
 import path from 'path';
 import { URL, fileURLToPath } from 'url';
-
 import { Router } from 'express';
 import { SearchController } from '../controllers/SearchController.js'
 import { AuthController } from '../controllers/security/AuthController.js';
@@ -11,6 +10,7 @@ import { AuthService } from '../services/security/AuthService.js';
 import { SearchService } from '../services/SearchService.js';
 import { BotService } from '../services/security/BotService.js';
 import { BotController } from '../controllers/security/BotController.js';
+import currentUser from '../security/CurrentUser.js';
 
 const { readFile } = fsPromises;
 
@@ -29,9 +29,10 @@ const authService = new AuthService(SECRET_KEY, chaseioRepository);
 const botService = new BotService(chaseioRepository)
 
 const searchController = new SearchController(searchService);
+
 const authController = new AuthController(authService);
 const botController = new BotController(botService);
-const authToken = new AuthToken();
+const auth = new AuthToken();
 
 
 router.post('/login', (req, res) => {
@@ -42,15 +43,20 @@ router.post('/bot', (req, res) => {
   botController.sendWpp(req, res);
 })
 
-router.use('/search', authToken.authenticateToken);
+router.get('/logout', (req, res) => authController.logout(req, res));
+
+router.use('/search', auth.authenticateToken);
+router.use('/', auth.authenticateToken);
 
 router.post('/search', (req, res) => {
   searchController.fetchData(req, res);
 });
 
+
 router.get('/', (req, res) => {
   searchController.fetchAll(req, res);
 });
+
 
 router.get('/teste', async (req, res) => {
   const publicDir = path.join(currentDirectory, '../public');
@@ -65,6 +71,7 @@ router.get('/teste', async (req, res) => {
     res.status(500).send('Erro ao ler o arquivo HTML.');
   }
 });
+
 
 export function initRoutes(app) {
   app.use('/', router);

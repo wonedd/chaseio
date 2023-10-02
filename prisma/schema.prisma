@@ -43,6 +43,10 @@ model chaseio {
   @@index([cep], map: "cep_1")
 }
 
+model messages {
+  id String @id @default(auto()) @map("_id") @db.ObjectId
+}
+
 model users {
   id    String @id @default(auto()) @map("_id") @db.ObjectId
   login String

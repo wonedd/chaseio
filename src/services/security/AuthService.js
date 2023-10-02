@@ -1,10 +1,11 @@
 import jwt from 'jsonwebtoken';
 import { ErrorHandler } from '../../error/ErrorHandler.js';
+import currentUser from '../../security/CurrentUser.js';
+
 export class AuthService {
   constructor(secretKey, chaseioRepository) {
     this.secretKey = secretKey;
     this.chaseioRepository = chaseioRepository;
-
   }
 
   login = async (credentials) => {
@@ -13,13 +14,24 @@ export class AuthService {
 
       if (user) {
         const token = jwt.sign({ id: user.id, username: user.login }, this.secretKey, { expiresIn: '1h' });
-        return token;
+
+        currentUser.setToken(token);
+        currentUser.setUsername(user.login);
+        currentUser.setId(user.id);
+
+        return currentUser;
+
       } else {
         throw ErrorHandler.unauthorized('Credenciais inválidas');
       }
+
     } catch (error) {
       throw ErrorHandler.internalServerError(error.message);
     }
+  }
+
+  logout = async () => {
+    currentUser.clear();
   }
 
   verifyToken = async (token) => {
@@ -27,8 +39,7 @@ export class AuthService {
       const decoded = jwt.verify(token, this.secretKey);
       return decoded;
     } catch (error) {
-      throw ErrorHandler.unauthorized('Token inválido'); // Use ErrorHandler para gerar um erro personalizado
+      throw ErrorHandler.unauthorized('Token inválido');
     }
   }
 }
-

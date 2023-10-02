@@ -1,8 +1,8 @@
 import { ErrorHandler } from '../error/ErrorHandler.js';
 
 export class SearchController {
-  constructor(_searchService) {
-    this.searchService = _searchService;
+  constructor(searchService) {
+    this.searchService = searchService;
   }
 
   async fetchAll(req, res) {
@@ -28,9 +28,10 @@ export class SearchController {
         resultsCnaeFiscal,
       });
     } catch (error) {
-      // Tratar o erro usando o ErrorHandler
       const errorHandler = ErrorHandler.internalServerError('Erro ao buscar resultados por CNAE Fiscal');
       res.status(errorHandler.statusCode).json({ error: errorHandler.message });
     }
   }
+
+
 }

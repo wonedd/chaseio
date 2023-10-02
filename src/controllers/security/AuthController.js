@@ -2,17 +2,20 @@ import { ErrorHandler } from '../../error/ErrorHandler.js';
 
 export class AuthController {
   constructor(authService) {
-    this.authService = authService
+    this.authService = authService;
   }
 
   login = async (req, res) => {
     try {
       const { credentials } = req.body;
 
-      const token = await this.authService.login(credentials);
+      const data = await this.authService.login(credentials);
 
-      if (token) {
-        res.status(200).json({ token });
+      if (data) {
+        req.session.token = data.token;
+        req.session.username = data.username;
+
+        res.status(200).json({ session: req.session, userId: data.id });
       } else {
         const errorHandler = ErrorHandler.unauthorized('Credenciais inválidas');
         res.status(errorHandler.statusCode).json({ error: errorHandler.message });
@@ -20,13 +23,23 @@ export class AuthController {
     } catch (error) {
       const errorHandler = ErrorHandler.internalServerError(error.message);
       res.status(errorHandler.statusCode).json({ error: errorHandler.message });
-
     }
   }
 
   logout = async (req, res) => {
-    res.json({ message: 'Logout realizado com sucesso' });
+    try {
+      req.session.destroy((err) => {
+        if (err) {
+          const errorHandler = ErrorHandler.internalServerError('Erro ao realizar logout');
+          res.status(errorHandler.statusCode).json({ error: errorHandler.message });
+        } else {
+          res.json({ message: 'Logout realizado com sucesso' });
+        }
+      });
+      await this.authService.logout();
+    } catch (error) {
+      const errorHandler = ErrorHandler.internalServerError(error.message);
+      res.status(errorHandler.statusCode).json({ error: errorHandler.message });
+    }
   }
 }
-
-

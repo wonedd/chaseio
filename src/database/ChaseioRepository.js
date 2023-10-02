@@ -114,7 +114,6 @@ export class ChaseioRepository {
       const result = await prisma.users.findFirst({
         where: {
           login: credentials.login,
-          password: credentials.password
         }
       })
 
@@ -123,5 +122,6 @@ export class ChaseioRepository {
       return error;
     }
   }
+
 
 }
