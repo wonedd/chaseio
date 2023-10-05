@@ -12,7 +12,7 @@ export class AuthController {
       const data = await this.authService.login(credentials);
 
       if (data) {
-        res.status(200).json({ session: req.session, userId: data.id });
+        res.status(200).json({ session: req.session, data: data });
       } else {
         const errorHandler = ErrorHandler.unauthorized('Credenciais inválidas');
         res.status(errorHandler.statusCode).json({ error: errorHandler.message });

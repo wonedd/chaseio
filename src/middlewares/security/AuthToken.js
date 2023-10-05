@@ -8,10 +8,7 @@ export class AuthToken {
       const errorHandler = ErrorHandler.unauthorized('Acesso não autorizado');
       return res.status(errorHandler.statusCode).json({ error: errorHandler.message });
     }
-    req.user = {
-      username: req.session.username,
-      token: req.session.token,
-    };
+
 
     next();
   }
