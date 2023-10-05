@@ -7,6 +7,16 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+type MessagesMsgEnviadas {
+  msg_corpo   String
+  qtde_envios Int
+}
+
+type MessagesMsgRecebidas {
+  message_id String
+  msg_corpo  String
+}
+
 model chaseio {
   id                String  @id @default(auto()) @map("_id") @db.ObjectId
   bairro            String
@@ -44,11 +54,18 @@ model chaseio {
 }
 
 model messages {
-  id String @id @default(auto()) @map("_id") @db.ObjectId
+  id             String               @id @default(auto()) @map("_id") @db.ObjectId
+  msg_enviadas   MessagesMsgEnviadas
+  msg_recebidas  MessagesMsgRecebidas
+  qtde_envios    Int
+  qtde_respostas Int
+  user_id        String
 }
 
 model users {
-  id    String @id @default(auto()) @map("_id") @db.ObjectId
-  login String
-  senha String
+  id           String @id @default(auto()) @map("_id") @db.ObjectId
+  /// Could not determine type: the field only had null or empty values in the sample set.
+  ids_contacts Json?
+  login        String
+  senha        String
 }
