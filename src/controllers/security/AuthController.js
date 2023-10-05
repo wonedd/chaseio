@@ -12,9 +12,6 @@ export class AuthController {
       const data = await this.authService.login(credentials);
 
       if (data) {
-        req.session.token = data.token;
-        req.session.username = data.username;
-
         res.status(200).json({ session: req.session, userId: data.id });
       } else {
         const errorHandler = ErrorHandler.unauthorized('Credenciais inválidas');

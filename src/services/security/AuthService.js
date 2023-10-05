@@ -3,15 +3,14 @@ import { ErrorHandler } from '../../error/ErrorHandler.js';
 import currentUser from '../../security/CurrentUser.js';
 
 export class AuthService {
-  constructor(secretKey, chaseioRepository) {
+  constructor(secretKey, userRepository) {
     this.secretKey = secretKey;
-    this.chaseioRepository = chaseioRepository;
+    this.userRepository = userRepository;
   }
 
   login = async (credentials) => {
     try {
-      const user = await this.chaseioRepository.login(credentials);
-
+      const user = await this.userRepository.login(credentials);
       if (user) {
         const token = jwt.sign({ id: user.id, username: user.login }, this.secretKey, { expiresIn: '1h' });
 
@@ -19,7 +18,7 @@ export class AuthService {
         currentUser.setUsername(user.login);
         currentUser.setId(user.id);
 
-        return currentUser;
+        return { user, token };
 
       } else {
         throw ErrorHandler.unauthorized('Credenciais inválidas');

@@ -1,10 +1,10 @@
 import venom from 'venom-bot';
 import { ErrorHandler } from '../../error/ErrorHandler.js';
-import { EventEmitter } from 'events'
+import currentUser from '../../security/CurrentUser.js';
 
 export class BotService {
-  constructor(chaseioRepository) {
-    this.chaseioRepository = chaseioRepository;
+  constructor(messageRepository) {
+    this.messageRepository = messageRepository;
   }
 
   sendMessage = async (companies) => {
@@ -19,59 +19,43 @@ export class BotService {
         await client.sendText(phoneNumber, message);
         console.log('Mensagem enviada para:', phoneNumber);
 
-        // const receivedMessage = await new Promise((resolve, reject) => {
-        client.onMessage(async (message) => {
-          console.log(message)
-          //     if (message) {
-          //       try {
-          //         const response = {
-          //           mensagem_id: message.id,
-          //           corpo: message.body,
-          //           alvo: message.notifyName,
-          //           celular: message.from,
-          //         };
+        client.onMessage(async (receivedMessage) => {
 
-          const result = await this.chaseioRepository.createMessage(message.body);
-          console.log(result)
+          await this.messageRepository.updateSentMessageCount(receivedMessage.id, 'envio');
+
+          await this.messageRepository.updateReceivedMessageCount(receivedMessage.id, 'resposta');
+
+          const result = await this.messageRepository.createMessage({
+            message_id: receivedMessage.id,
+            msg_corpo: receivedMessage.body,
+            user_id: currentUser.id,
+          });
+          console.log(result);
+
+          response.push({
+            phoneNumber,
+            sentMessage: message,
+            receivedMessage: receivedMessage.body,
+          });
         });
-        //         resolve(response);
-        //       } catch (error) {
-        //         reject(error);
-        //       }
-        //     } else {
-        //       reject(ErrorHandler.internalServerError());
-        //     }
-        //   });
-        // });
 
-        // const result = await this.chaseioRepository.setWasContacted(company.celular);
-
-        // responses.push({
-        //   phoneNumber,
-        //   sentMessage: message,
-        //   receivedMessage,
-        //   wasContacted: result,
-        // });
-        response.push({
-          companies
-        })
-
+        await new Promise((resolve) => setTimeout(resolve, 5000));
       }
 
-      // await client.close();
+      await client.close();
 
       return response;
     } catch (error) {
       throw ErrorHandler.internalServerError(error.message);
     }
   };
+
   listMessages = async () => {
     try {
-      const messages = await this.chaseioRepository.findAllMessages();
+      const messages = await this.messageRepository.findAllMessages();
       return messages;
     } catch (error) {
       throw ErrorHandler.internalServerError(error.message);
     }
   };
-
 }

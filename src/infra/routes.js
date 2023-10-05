@@ -10,6 +10,8 @@ import { AuthService } from '../services/security/AuthService.js';
 import { SearchService } from '../services/SearchService.js';
 import { BotService } from '../services/security/BotService.js';
 import { BotController } from '../controllers/security/BotController.js';
+import { UserRepository } from '../database/UserRepository.js';
+import { MessagesRepository } from '../database/MessageRepository.js';
 
 const { readFile } = fsPromises;
 
@@ -22,10 +24,13 @@ const router = Router();
 const SECRET_KEY = process.env.SECRET_KEY
 
 const chaseioRepository = new ChaseioRepository();
+const userRepository = new UserRepository();
+const messageRepository = new MessagesRepository();
+
 
 const searchService = new SearchService(chaseioRepository);
-const authService = new AuthService(SECRET_KEY, chaseioRepository);
-const botService = new BotService(chaseioRepository)
+const authService = new AuthService(SECRET_KEY, userRepository);
+const botService = new BotService(messageRepository)
 
 const searchController = new SearchController(searchService);
 
@@ -52,11 +57,13 @@ router.post('/login', (req, res) => {
 });
 
 router.get('/messages', (req, res) => botController.findAllMessages(req, res))
+
 router.post('/bot', (req, res) => {
   botController.sendWpp(req, res);
 })
 
 router.get('/logout', (req, res) => authController.logout(req, res));
+
 
 router.use('/search/cnae', auth.authenticateToken);
 router.use('/', auth.authenticateToken);
@@ -64,7 +71,6 @@ router.use('/', auth.authenticateToken);
 router.post('/search/cnae', (req, res) => {
   searchController.fetchDataByCnae(req, res);
 });
-
 
 router.get('/', (req, res) => {
   searchController.fetchAll(req, res);

@@ -1,13 +1,15 @@
-import { PrismaClient } from '@prisma/client';
+import { MainRepository } from './MainRepository.js';
 
-const prisma = new PrismaClient();
-
-export class ChaseioRepository {
-  async searchByCnaeFiscal(query) {
-    if (query.length > 0) {
+export class ChaseioRepository extends MainRepository {
+  constructor() {
+    super();
+  }
+  async searchByCnaeFiscal(cnae) {
+    const prisma = await this.getPrisma();
+    if (cnae.length > 0) {
       const results = await prisma.chaseio.findMany({
         where: {
-          cnae_fiscal: { contains: query },
+          cnae_fiscal: { contains: cnae },
         },
         take: 10,
       });
@@ -20,6 +22,7 @@ export class ChaseioRepository {
 
   async searchByUF(query) {
     if (query.length > 0) {
+      const prisma = await this.getPrisma();
       const results = await prisma.chaseio.findMany({
         where: {
           uf: { contains: query },
@@ -34,6 +37,8 @@ export class ChaseioRepository {
   }
 
   async searchByMunicipio(query) {
+    const prisma = await this.getPrisma();
+
     if (query.length > 0) {
       const results = await prisma.chaseio.findMany({
         where: {
@@ -49,7 +54,9 @@ export class ChaseioRepository {
   }
 
   async searchByBairro(query) {
+    const prisma = await this.getPrisma();
     if (query.length > 0) {
+
       const results = await prisma.chaseio.findMany({
         where: {
           bairro: { contains: query },
@@ -64,6 +71,8 @@ export class ChaseioRepository {
   }
 
   async searchByCEP(query) {
+    const prisma = await this.getPrisma();
+
     if (query.length > 0) {
       const results = await prisma.chaseio.findMany({
         where: {
@@ -79,6 +88,8 @@ export class ChaseioRepository {
   }
 
   async findAll() {
+    const prisma = await this.getPrisma();
+
     try {
       const result = await prisma.chaseio.findMany({
         take: 5000,
@@ -90,22 +101,14 @@ export class ChaseioRepository {
     }
   }
 
-  async findAllMessages() {
+
+  async setWasContacted(companieId) {
+    const prisma = await this.getPrisma();
+
     try {
-      const result = await prisma.messages.findMany();
-
-      return (result);
-    } catch (error) {
-      return error;
-    }
-  }
-
-
-  async setWasContacted(companieCel) {
-    try {
-      const result = await companie.chaseio.findFirst({
+      const result = await prisma.chaseio.findUnique({
         where: {
-          celular: companieCel
+          id: companieId
         }
       });
 
@@ -120,30 +123,6 @@ export class ChaseioRepository {
 
 
 
-  async login(credentials) {
-    try {
-      const result = await prisma.users.findFirst({
-        where: {
-          login: credentials.login,
-        }
-      })
 
-      return result;
-    } catch (error) {
-      return error;
-    }
-  }
-
-  async createMessage(message) {
-    try {
-      const result = await prisma.messages.create({
-        data: message
-      })
-
-      return result;
-    } catch (error) {
-      return error;
-    }
-  }
 
 }

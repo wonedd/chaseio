@@ -4,8 +4,8 @@ export class SearchService {
     this.chaseioRepository = chaseioRepository;
   }
 
-  searchByCnaeFiscal = async (query) => {
-    const results = await this.chaseioRepository.searchByCnaeFiscal(query);
+  searchByCnaeFiscal = async (cnae) => {
+    const results = await this.chaseioRepository.searchByCnaeFiscal(cnae);
     return results;
   }
 
