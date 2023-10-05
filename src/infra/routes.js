@@ -58,15 +58,16 @@ router.post('/login', (req, res) => {
 
 router.get('/messages', (req, res) => botController.findAllMessages(req, res))
 
-router.post('/bot', (req, res) => {
-  botController.sendWpp(req, res);
-})
-
 router.get('/logout', (req, res) => authController.logout(req, res));
 
 
 router.use('/search/cnae', auth.authenticateToken);
 router.use('/', auth.authenticateToken);
+router.use('/bot', auth.authenticateToken);
+
+router.post('/bot', (req, res) => {
+  botController.sendWpp(req, res);
+})
 
 router.post('/search/cnae', (req, res) => {
   searchController.fetchDataByCnae(req, res);
