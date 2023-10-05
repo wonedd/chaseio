@@ -42,8 +42,6 @@ export class BotService {
         await new Promise((resolve) => setTimeout(resolve, 5000));
       }
 
-      await client.close();
-
       return response;
     } catch (error) {
       throw ErrorHandler.internalServerError(error.message);
