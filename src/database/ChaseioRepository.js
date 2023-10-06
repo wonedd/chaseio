@@ -87,6 +87,39 @@ export class ChaseioRepository extends MainRepository {
     }
   }
 
+  async searchBy(query) {
+    const prisma = await this.getPrisma();
+    let where = { AND: [] };
+
+    const filterKeys = Object.keys(query);
+
+    if (filterKeys.length > 0) {
+      where = {
+        AND: filterKeys.map((key) => ({
+          [key]: { contains: query[key] },
+        })),
+      };
+    }
+
+    try {
+      const results = await prisma.chaseio.findMany({
+        where,
+        take: 10,
+      });
+
+      if (results.length > 0) {
+        console.log("Resultados encontrados.");
+      } else {
+        console.log("Nenhum resultado encontrado.");
+      }
+
+      return results;
+    } catch (error) {
+      console.error("Erro ao buscar no banco de dados:", error);
+      throw error;
+    }
+  }
+
   async findAll() {
     const prisma = await this.getPrisma();
 

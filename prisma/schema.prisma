@@ -42,6 +42,14 @@ model chaseio {
   @@index([cep], map: "cep_1")
 }
 
+model chaseio_metrics {
+  id          String  @id @default(auto()) @map("_id") @db.ObjectId
+  chave       String?
+  porcentagem Float?
+  tipo        String?
+  valor       Int?
+}
+
 model messages {
   id             String @id @default(auto()) @map("_id") @db.ObjectId
   message        String

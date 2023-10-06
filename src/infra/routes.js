@@ -60,9 +60,15 @@ router.get('/messages', (req, res) => botController.findAllMessages(req, res))
 
 router.get('/logout', (req, res) => authController.logout(req, res));
 
+router.post('/search', (req, res) => {
+  searchController.searchBy(req, res);
+});
+router.get('/', (req, res) => {
+  searchController.fetchAll(req, res);
+});
 
 router.use('/search/cnae', auth.authenticateToken);
-router.use('/', auth.authenticateToken);
+// router.use('/', auth.authenticateToken);
 router.use('/bot', auth.authenticateToken);
 
 router.post('/bot', (req, res) => {
@@ -73,9 +79,6 @@ router.post('/search/cnae', (req, res) => {
   searchController.fetchDataByCnae(req, res);
 });
 
-router.get('/', (req, res) => {
-  searchController.fetchAll(req, res);
-});
 
 
 

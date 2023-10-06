@@ -29,6 +29,10 @@ export class SearchService {
     return results;
   }
 
+  searchBy = async (query) => {
+    const results = await this.chaseioRepository.searchBy(query);
+    return results;
+  }
   findAll = async () => {
     const results = await this.chaseioRepository.findAll();
     return results;

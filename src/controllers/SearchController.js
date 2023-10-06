@@ -33,5 +33,18 @@ export class SearchController {
     }
   }
 
+  async searchBy(req, res) {
+    try {
+      const { query } = req.body;
 
+      const result = await this.searchService.searchBy(query);
+
+      res.status(200).json({
+        result
+      });
+    } catch (error) {
+      const errorHandler = ErrorHandler.internalServerError('Erro ao buscar resultados');
+      res.status(errorHandler.statusCode).json({ error: errorHandler.message });
+    }
+  }
 }
