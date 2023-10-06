@@ -121,7 +121,8 @@
       <p>Exemplo de solicitação:</p>
       <pre>
         POST /search
-        {
+      {
+        "query":{
           "bairro": "Nome do Bairro",
           "cnae_fiscal": "Cnae Fiscal",
           "motivo_situacao": "Motivo da Situação",
@@ -135,6 +136,7 @@
           "cep": "CEP",
           "user_id": "ID do Usuário"
         }
+      }
       </pre>
       <p>Você pode incluir um ou mais critérios de filtro na solicitação. Os resultados serão retornados com base nos critérios fornecidos.</p>
     </li>
