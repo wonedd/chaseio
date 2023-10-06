@@ -21,28 +21,27 @@ export class BotService {
 
         client.onMessage(async (receivedMessage) => {
 
-          await this.messageRepository.updateSentMessageCount(receivedMessage.id, 'envio');
+          const message = {
+            target_contact: company.celular,
+            body: receivedMessage.body,
+            user_id: "1232"
+          };
 
-          await this.messageRepository.updateReceivedMessageCount(receivedMessage.id, 'resposta');
+          const result = await this.messageRepository.createMessage(message);
 
-          const result = await this.messageRepository.createMessage({
-            message_id: receivedMessage.id,
-            msg_corpo: receivedMessage.body,
-            user_id: currentUser.id,
-          });
-          console.log(result);
+          console.log("🚀 ~ file: BotService.js:31 ~ BotService ~ client.onMessage ~ result:", result);
+
 
           response.push({
-            phoneNumber,
-            sentMessage: message,
-            receivedMessage: receivedMessage.body,
+            result
           });
         });
 
-        await new Promise((resolve) => setTimeout(resolve, 5000));
+        await new Promise((resolve) => setTimeout(resolve, 2000));
       }
+      return result;
 
-      return response;
+
     } catch (error) {
       throw ErrorHandler.internalServerError(error.message);
     }
