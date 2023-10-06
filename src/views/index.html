@@ -114,6 +114,30 @@
         GET /doc
       </pre>
     </li>
+    <li>
+      <strong>POST /search</strong>: Rota para buscar dados.
+      <p>Esta rota permite que você busque dados com base em diversos critérios de filtro.</p>
+      <p>Os critérios de filtro são opcionais e podem ser combinados para refinar a busca.</p>
+      <p>Exemplo de solicitação:</p>
+      <pre>
+        POST /search
+        {
+          "bairro": "Nome do Bairro",
+          "cnae_fiscal": "Cnae Fiscal",
+          "motivo_situacao": "Motivo da Situação",
+          "natureza": "Natureza",
+          "municipio": "Nome do Município",
+          "uf": "UF",
+          "opcao_mei": "Opção MEI",
+          "opcao_simples": "Opção Simples",
+          "situacao": "Situação",
+          "inicio_atividade": "Data de Início de Atividade",
+          "cep": "CEP",
+          "user_id": "ID do Usuário"
+        }
+      </pre>
+      <p>Você pode incluir um ou mais critérios de filtro na solicitação. Os resultados serão retornados com base nos critérios fornecidos.</p>
+    </li>
   </ul>
 </body>
 </html>
